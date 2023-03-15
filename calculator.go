@@ -18,10 +18,10 @@ type Transaction struct {
 func CalculateDebt(transactions []Transaction) Debt {
 	d := Debt{}
 	for _, t := range transactions {
-		d[t.PayerID] += t.Amount
-		v := roundUp(t.Amount / float64(len(t.PayeeIDs))) // 100/3 = 33.33
+		d[t.PayerID] += t.Amount // Credit the payer the total amount
+		v := roundUp(t.Amount / float64(len(t.PayeeIDs)))
 		for _, payeeID := range t.PayeeIDs {
-			d[payeeID] -= v
+			d[payeeID] -= v // Debit the payee their share
 			if isOddSplit(t.Amount, len(t.PayeeIDs)) && payeeID == t.PayerID {
 				// When we split an amount sometimes the split is a rational number i.e. 33.33333333333
 				// In this case since currencies are not rational, and we only have 2 decimal places.
