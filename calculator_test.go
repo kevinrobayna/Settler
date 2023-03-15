@@ -19,8 +19,8 @@ func TestCalculateDebt(t *testing.T) {
 				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "2"}}},
 			},
 			result: Debt{
-				"1": 100,
-				"2": -100,
+				"1": -100,
+				"2": 100,
 			},
 		},
 		{
@@ -29,8 +29,8 @@ func TestCalculateDebt(t *testing.T) {
 				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "1"}, {PayeeID: "2"}}},
 			},
 			result: Debt{
-				"1": 50,
-				"2": -50,
+				"1": -50,
+				"2": 50,
 			},
 		},
 		{
@@ -39,9 +39,22 @@ func TestCalculateDebt(t *testing.T) {
 				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "1"}, {PayeeID: "2"}, {PayeeID: "3"}}},
 			},
 			result: Debt{
-				"1": 66.66,
-				"2": -33.33,
-				"3": -33.33,
+				"1": -66.66,
+				"2": 33.33,
+				"3": 33.33,
+			},
+		},
+		{
+			name: "example from readme",
+			transactions: []Transaction{
+				{Amount: 100, PayerID: "A", Shares: []Share{{PayeeID: "A"}, {PayeeID: "B"}}},
+				{Amount: 60, PayerID: "C", Shares: []Share{{PayeeID: "A"}, {PayeeID: "B"}, {PayeeID: "C"}}},
+				{Amount: 300, PayerID: "B", Shares: []Share{{PayeeID: "A"}, {PayeeID: "B"}, {PayeeID: "C"}}},
+			},
+			result: Debt{
+				"A": 70,
+				"B": -130,
+				"C": 60,
 			},
 		},
 	}

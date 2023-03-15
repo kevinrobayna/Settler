@@ -1,7 +1,8 @@
 # Settler
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/kevinrobayna/settler)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kevinrobayna/settler/test.tml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kevinrobayna/Settler/test.yml)
+![GitHub](https://img.shields.io/github/license/kevinrobayna/settler)
 
 Library to calculate debt when a group wants to split expenses
 
@@ -46,33 +47,33 @@ The "ledger" table would look like this:
 | Snow Equipment | 100 | 100 | 100 |
 
 The keep eyes around you have noticed that we are missing the other side of the system. For this I've introduced
-signs (`+` and `-`) to represents debits and credited
+signs (`+` and `-`) to represents credits and debits.
 
-|                    | A    | B    | C    |
-|--------------------|------|------|------|
-| Hotel (C)          | 100  | 0    | 0    |
-| Hotel              | -50  | -50  | 0    |
-| Lunch (C)          | 0    | 0    | 60   |
-| Lunch              | -20  | -20  | -20  |
-| Snow Equipment (C) | 0    | 300  | 0    |
-| Snow Equipment     | -100 | -100 | -100 |
+|                    | A    | B    | C   |
+|--------------------|------|------|-----|
+| Hotel (C)          | -100 | 0    | 0   |
+| Hotel              | 50   | 50   | 0   |
+| Lunch (C)          | 0    | 0    | -60 |
+| Lunch              | 20   | 20   | 20  |
+| Snow Equipment (C) | 0    | -300 | 0   |
+| Snow Equipment     | 100  | 100  | 100 |
 
 Now if we add everything, columns and rows, we get the 0 we were expecting. Let's now add all the rows together and see
 what people owe to each other.
 
-|       | A   | B   | C   |
-|-------|-----|-----|-----|
-| Debts | -70 | 130 | -60 |
+|       | A   | B    | C   |
+|-------|-----|------|-----|
+| Debts | 70  | -130 | 60  |
 
 So this means that person B is owed 130 from A and C. So person A and C would need to transfer in total 130 and the
 table would look like this:
 
-|            | A   | B   | C   |
-|------------|-----|-----|-----|
-| Debts      | -70 | 130 | -60 |
-| Transfer A | 70  | -70 | 0   |
-| Transfer C | 0   | -60 | 60  |
+|            | A   | B    | C   |
+|------------|-----|------|-----|
+| Debts      | 70  | -130 | 60  |
+| Transfer A | -70 | 70   | 0   |
+| Transfer C | 0   | 60   | -60 |
 
-Here we see that Person A is Debited 70 which means person B is credited -70 and person C is debited 60. Which means
+Here we see that Person A is Debited 70 which means person B is credited 70 and person C is debited 60. Which means
 that everything comes back to a balance position.
 
