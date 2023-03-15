@@ -23,15 +23,8 @@ jobs:
       - uses: actions/setup-go@v3
       - uses: actions/checkout@v3
 
-      - run: make install
       - run: go mod verify
       - run: go vet ./...
 
       - name: Run unit tests
-        run: make test
-
-      - name: Test Summary
-        uses: test-summary/action@v2
-        with:
-          paths: "**/TEST-*.xml"
-        if: always()
+        run: go test -v

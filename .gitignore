@@ -17,8 +17,6 @@
 !README.md
 !LICENSE
 
-!Makefile
-
 !.golangci.yml
 
 # ...even if they are in subdirectories
