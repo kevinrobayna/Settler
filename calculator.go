@@ -24,20 +24,28 @@ type Share struct {
 func CalculateDebt(transactions []Transaction) Debt {
 	d := Debt{}
 	for _, t := range transactions {
-		d[t.PayerID] += t.Amount // Credit the payer the total amount
+		d[t.PayerID] += debit(t.Amount) // Debit the payer the total amount
 		v := roundUp(t.Amount / float64(len(t.Shares)))
 		for _, share := range t.Shares {
-			d[share.PayeeID] -= v // Debit the payee their share
+			d[share.PayeeID] += credit(v) // credit the payee their share
 			if isOddSplit(t.Amount, len(t.Shares)) && share.PayeeID == t.PayerID {
 				// When we split an amount sometimes the split is a rational number i.e. 33.33333333333
 				// In this case since currencies are not rational, and we only have 2 decimal places.
 				// Someone needs to pay a cent more, usually the payer as this simplifies things.
-				d[t.PayerID] -= 0.01
+				d[t.PayerID] += credit(0.01)
 			}
 		}
 	}
 
 	return d
+}
+
+func debit(v float64) float64 {
+	return -v
+}
+
+func credit(v float64) float64 {
+	return v
 }
 
 // roundUp rounds a float64 to 2 decimal places.
