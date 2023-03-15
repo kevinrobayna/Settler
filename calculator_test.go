@@ -16,7 +16,7 @@ func TestCalculateDebt(t *testing.T) {
 		{
 			name: "one payer, another payee, payee owes total value",
 			transactions: []Transaction{
-				{Amount: 100, PayerID: "1", PayeeIDs: []string{"2"}},
+				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "2"}}},
 			},
 			result: Debt{
 				"1": 100,
@@ -26,7 +26,7 @@ func TestCalculateDebt(t *testing.T) {
 		{
 			name: "one payer, two payees, debt is split evenly",
 			transactions: []Transaction{
-				{Amount: 100, PayerID: "1", PayeeIDs: []string{"1", "2"}},
+				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "1"}, {PayeeID: "2"}}},
 			},
 			result: Debt{
 				"1": 50,
@@ -36,7 +36,7 @@ func TestCalculateDebt(t *testing.T) {
 		{
 			name: "one payer, three payees, debt is split evenly except one has to pay a cent more",
 			transactions: []Transaction{
-				{Amount: 100, PayerID: "1", PayeeIDs: []string{"1", "2", "3"}},
+				{Amount: 100, PayerID: "1", Shares: []Share{{PayeeID: "1"}, {PayeeID: "2"}, {PayeeID: "3"}}},
 			},
 			result: Debt{
 				"1": 66.66,
