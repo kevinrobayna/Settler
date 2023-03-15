@@ -16,7 +16,6 @@ type Transaction struct {
 // Share represents the portion of the bill that a person owes. The bill is split evenly unless the amount is specified.
 type Share struct {
 	PayeeID string
-	Amount  float64
 }
 
 // CalculateDebt calculates what each person owes each other spreading evenly.
