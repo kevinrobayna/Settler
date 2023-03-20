@@ -19,8 +19,14 @@ jobs:
       - uses: golangci/golangci-lint-action@v3
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Check https://endoflife.date/go to know which versions are currently active
+        go: ['1.19', '1.20' ]
     steps:
       - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
 
       - run: go mod verify
