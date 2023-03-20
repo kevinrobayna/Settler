@@ -1,23 +1,5 @@
 package settler
 
-import (
-	"math"
-)
-
-type Debt map[string]float64
-
-// Transaction represents a "bill" in which someone paid an amount for a list of people.
-type Transaction struct {
-	PayerID string
-	Amount  float64
-	Shares  []Share
-}
-
-// Share represents the portion of the bill that a person owes. The bill is split evenly unless the amount is specified.
-type Share struct {
-	PayeeID string
-}
-
 // CalculateDebt calculates what each person owes each other spreading evenly.
 // If the split is not even, the payer pays the extra cent as this simplifies the calculus.
 // Currently, there's no support for different weights i.e. Someone paid 100 but instead of paying evenly they want to pay what they owe exactly.
@@ -38,26 +20,4 @@ func CalculateDebt(transactions []Transaction) Debt {
 	}
 
 	return d
-}
-
-func debit(v float64) float64 {
-	return -v
-}
-
-func credit(v float64) float64 {
-	return v
-}
-
-// roundUp rounds a float64 to 2 decimal places.
-func roundUp(value float64) float64 {
-	ratio := math.Pow(10, float64(2))
-	return math.Round(value*ratio) / ratio
-}
-
-// isOddSplit returns true if the remainder of val/n is not zero.
-// This means that the split is not even and therefore someone needs to pay a cent more.
-func isOddSplit(val float64, n int) bool {
-	r := math.Remainder(val, float64(n))
-
-	return r != 0
 }
