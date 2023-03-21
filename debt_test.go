@@ -1,6 +1,9 @@
 package settler
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestCalculateDebt(t *testing.T) {
 	tests := []struct {
@@ -77,6 +80,49 @@ func TestCalculateDebt(t *testing.T) {
 			// If everyone paid their debt, the total debt should be zero.
 			if totalDebt != 0.0 {
 				t.Errorf("Total debt should be zero. Got %v", totalDebt)
+			}
+		})
+	}
+}
+
+func TestSettleDebt(t *testing.T) {
+	tests := []struct {
+		name string
+		debt Debt
+		want []Transaction
+	}{
+		{
+			name: "no debt, no transactions",
+			debt: Debt{},
+			want: []Transaction{},
+		},
+		{
+			name: "one debtor, one creditor, one transaction",
+			debt: Debt{
+				"1": -100,
+				"2": 100,
+			},
+			want: []Transaction{
+				{Amount: 100, PayerID: "2", Shares: []Share{{PayeeID: "1"}}},
+			},
+		},
+		{
+			name: "one debtor, two creditors, two transactions",
+			debt: Debt{
+				"A": 70,
+				"B": -130,
+				"C": 60,
+			},
+			want: []Transaction{
+				{Amount: 60, PayerID: "B", Shares: []Share{{PayeeID: "C"}}},
+				{Amount: 70, PayerID: "B", Shares: []Share{{PayeeID: "A"}}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SettleDebt(tt.debt); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SettleDebt() = %v, want %v", got, tt.want)
 			}
 		})
 	}

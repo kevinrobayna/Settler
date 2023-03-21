@@ -21,3 +21,39 @@ func CalculateDebt(transactions []Transaction) Debt {
 
 	return d
 }
+
+// Write a function that takes a Debt and returns a list of Transactions that settle the debt.
+// The transactions can be mapped by the payerID.
+func SettleDebt(d Debt) []Transaction {
+	var transactions []Transaction
+	for payer, amount := range d {
+		if amount > 0 {
+			// Pay the debt
+			for payee, payeeAmount := range d {
+				if payeeAmount < 0 {
+					// We owe this person money
+					if amount+payeeAmount > 0 {
+						// We still owe some money
+						transactions = append(transactions, Transaction{
+							PayerID: payer,
+							Shares:  []Share{{PayeeID: payee}},
+							Amount:  amount,
+						})
+						d[payee] += amount
+						amount = 0
+					} else {
+						// We have paid this person back
+						transactions = append(transactions, Transaction{
+							PayerID: payer,
+							Shares:  []Share{{PayeeID: payee}},
+							Amount:  amount + payeeAmount,
+						})
+						d[payee] = 0
+						amount += payeeAmount
+					}
+				}
+			}
+		}
+	}
+	return transactions
+}
